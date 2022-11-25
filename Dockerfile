@@ -1,7 +1,7 @@
 FROM python:3-slim-buster as builder
 
-LABEL description="ElastAlert 2 Official Image"
-LABEL maintainer="Jason Ertel"
+LABEL description="ElastAlert 2 Image"
+LABEL maintainer="SonTN"
 
 COPY . /tmp/elastalert
 
@@ -19,7 +19,7 @@ ARG USERNAME=elastalert
 COPY --from=builder /tmp/elastalert/dist/*.tar.gz /tmp/
 
 RUN apt update && apt -y upgrade && \
-    apt -y install jq curl gcc libffi-dev && \
+    apt -y install ssh jq curl gcc libffi-dev && \
     rm -rf /var/lib/apt/lists/* && \
     pip install /tmp/*.tar.gz && \
     rm -rf /tmp/* && \
@@ -36,6 +36,11 @@ RUN apt update && apt -y upgrade && \
     groupadd -g ${GID} ${USERNAME} && \
     useradd -u ${UID} -g ${GID} -M -b /opt -s /sbin/nologin \
         -c "ElastAlert 2 User" ${USERNAME}
+
+RUN mkdir /opt/${USERNAME}/.ssh 
+COPY ./ssh/ /opt/${USERNAME}/.ssh 
+RUN chmod 700 /opt/${USERNAME}/.ssh \
+    chmod 600 /opt/${USERNAME}/.ssh/*
 
 USER ${USERNAME}
 ENV TZ "UTC"
