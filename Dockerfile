@@ -1,7 +1,7 @@
-FROM python:3-slim-buster as builder
+FROM python:3.10-slim-buster as builder
 
-LABEL description="ElastAlert 2 Image"
-LABEL maintainer="SonTN"
+LABEL description="ElastAlert2 Custom Image"
+LABEL maintainer="son@tradingstrategy.ai"
 
 COPY . /tmp/elastalert
 
@@ -10,7 +10,7 @@ RUN mkdir -p /opt/elastalert && \
     pip install setuptools wheel && \
     python setup.py sdist bdist_wheel
 
-FROM python:3-slim-buster
+FROM python:3.10-slim-buster
 
 ARG GID=1000
 ARG UID=1000
@@ -39,7 +39,7 @@ RUN apt update && apt -y upgrade && \
 
 RUN mkdir /opt/${USERNAME}/.ssh 
 COPY ./ssh/ /opt/${USERNAME}/.ssh 
-RUN chmod 700 /opt/${USERNAME}/.ssh \
+RUN chmod 700 /opt/${USERNAME}/.ssh && \
     chmod 600 /opt/${USERNAME}/.ssh/*
 
 USER ${USERNAME}
