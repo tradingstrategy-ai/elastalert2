@@ -38,9 +38,10 @@ RUN apt update && apt -y upgrade && \
         -c "ElastAlert 2 User" ${USERNAME}
 
 RUN mkdir /opt/${USERNAME}/.ssh 
-COPY ./ssh/ /opt/${USERNAME}/.ssh 
-RUN chmod 700 /opt/${USERNAME}/.ssh \
-    chmod 600 /opt/${USERNAME}/.ssh/*
+ADD ./ssh /opt/${USERNAME}/.ssh
+RUN chown ${USERNAME}:${USERNAME} -R /opt/${USERNAME}/.ssh 
+RUN chmod 700 /opt/${USERNAME}/.ssh
+RUN chmod 600 /opt/${USERNAME}/.ssh/*
 
 USER ${USERNAME}
 ENV TZ "UTC"
