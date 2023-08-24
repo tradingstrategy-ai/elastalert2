@@ -1,4 +1,4 @@
-FROM python:3-slim-buster as builder
+FROM python:3-slim as builder
 
 LABEL description="ElastAlert 2 Image"
 LABEL maintainer="SonTN"
@@ -10,7 +10,7 @@ RUN mkdir -p /opt/elastalert && \
     pip install setuptools wheel && \
     python setup.py sdist bdist_wheel
 
-FROM python:3-slim-buster
+FROM python:3-slim
 
 ARG GID=1000
 ARG UID=1000

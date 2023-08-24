@@ -1,6 +1,122 @@
 # 2.TBD.TBD
 
 ## Breaking changes
+- TBD
+
+## New features
+- TBD
+
+## Other changes
+- [Helm] Expose minReadySeconds parameter to assist in detecting failed deployments - [#1243](https://github.com/jertel/elastalert2/pull/1243) - @alexku7 
+
+# 2.13.2
+
+## Breaking changes
+- None
+
+## New features
+- None
+
+## Other changes
+- [Helm] Fix chart indentation issue introduced in 2.13.1 - [#1239](https://github.com/jertel/elastalert2/pull/1239) - @jertel
+
+# 2.13.1
+
+## Breaking changes
+- None
+
+## New features
+- None
+
+## Other changes
+- [Helm] Add support for generating rule config from a directory of rules, during chart deployment - [#1236](https://github.com/jertel/elastalert2/pull/1236) - @mehrdad-khojastefar 
+- [AlertManager] Fix typo with new feature released in 2.13.0 - [#1237](https://github.com/jertel/elastalert2/pull/1237) - @eveningcafe
+
+# 2.13.0
+
+## Breaking changes
+- None
+
+## New features
+- [Alertmanager] Add alertmanager resolve timeout configuration option - [#1187](https://github.com/jertel/elastalert2/pull/1187) - @eveningcafe
+
+## Other changes
+- [Docs] Clarify docs to state that alert_time_limit should not be 0 - [#1208](https://github.com/jertel/elastalert2/pull/1208) - @jertel
+- Add support for Kibana 8.9 for Kibana Discover - [#1224](https://github.com/jertel/elastalert2/pull/1224) - @nsano-rururu
+- Remove docker image pin to outdated "buster" debian release - [24f794a](https://github.com/jertel/elastalert2/commit/24f794a) - @jertel
+
+# 2.12.0
+
+## Breaking changes
+- None
+
+## New features
+- Add initial support for EQL - [#1189](https://github.com/jertel/elastalert2/pull/1189) - @jertel
+- Add `fields` parameter to rules to be able to pull in runtimes fields, and more. [#1193](https://github.com/jertel/elastalert2/pull/1193) - @Goggin
+- Add EQL support to elastalert-test-rule utility - [#1195](https://github.com/jertel/elastalert2/pull/1195) - @jertel
+
+## Other changes
+- Add support for Kibana 8.8 for Kibana Discover - [#1184](https://github.com/jertel/elastalert2/pull/1184) - @nsano-rururu
+- Upgrade pylint 2.17.0 to 2.17.4, pytest 7.2.2 to 7.3.1, pytest-xdist 3.2.0 to 3.3.1, sphinx 6.1.3 to 6.2.1, sphinx_rtd_theme == 1.2.2 - [#1194](https://github.com/jertel/elastalert2/pull/1194) - @nsano-rururu
+- Upgrade to Tox 4 - [#1196](https://github.com/jertel/elastalert2/pull/1196) - @jertel
+- Log message when exiting due to --end param being in the past - [#1199](https://github.com/jertel/elastalert2/pull/1199) - @jertel
+
+# 2.11.0
+
+## Breaking changes
+- None
+
+## New features
+- None
+
+## Other changes
+- [Kubernetes] Fix mistake introduced in #1141 related to initContainers - [#1145](https://github.com/jertel/elastalert2/pull/1145) - @aturpin1789
+- Add support for Kibana 8.7 for Kibana Discover - [#1153](https://github.com/jertel/elastalert2/pull/1153) - @nsano-rururu
+- [Docs] Add documentation for accessing subfields of array items - [#1166](https://github.com/jertel/elastalert2/pull/1166) - @jertel
+
+# 2.10.1
+
+## Breaking changes
+- None
+
+## New features
+- None
+
+## Other changes
+- Corrected alert bug when both top_count_keys and query_key are specified in a rule - [#1128](https://github.com/jertel/elastalert2/pull/1128) - @jertel
+- Fixed docker-compose detection logic from recent PR - [#1128](https://github.com/jertel/elastalert2/pull/1128) - @jertel
+- Upgrade pylint 2.15.5 to 2.17.0, pytest 7.2.0 to 7.2.2, pytest-xdist 3.1.0 to 3.2.0, sphinx 5.3.0 to 6.1.3, tox 3.27.1 to 3.28.0 - [#1131](https://github.com/jertel/elastalert2/pull/1131) - @nsano-rururu
+- Update Docs & FAQ(disable_rules_on_error, es_conn_timeout) - [#1133](https://github.com/jertel/elastalert2/pull/1133) - @nsano-rururu
+- [Kubernetes] Add extraInitContainers value to helm chart - [#1141](https://github.com/jertel/elastalert2/pull/1141) - @aturpin1789
+
+# 2.10.0
+
+## Breaking changes
+- [Alerta] All matches will now be sent with the alert - [#1068](https://github.com/jertel/elastalert2/pull/1068) - @dakotacody
+- Renamed the `overwrites` parameter to `overrides` in the load_conf method of config.py - [#1100](https://github.com/jertel/elastalert2/pull/1100) - @akusei
+
+## New features
+- [Graylog GELF] Alerter added. [#1050](https://github.com/jertel/elastalert2/pull/1050) - @malinkinsa
+- [TheHive] Format `title`, `type`, and `source` with dynamic lookup values - [#1092](https://github.com/jertel/elastalert2/pull/1092) - @fandigunawan
+- [HTTP POST2] `http_post2_payload` and `http_post2_headers` now support multiline JSON strings for better control over jinja templates - [#1104](https://github.com/jertel/elastalert2/pull/1104) - @akusei
+- [HTTP POST2] This alerter now supports the use of `jinja_root_name` - [#1104](https://github.com/jertel/elastalert2/pull/1104) - @akusei
+- [Rule Testing] The data file passed with `--data` can now contain a single JSON document or a list of JSON objects - [#1104](https://github.com/jertel/elastalert2/pull/1104) - @akusei
+
+## Other changes
+- [Docs] Clarify Jira Cloud authentication configuration - [94f7e8c](https://github.com/jertel/elastalert2/commit/94f7e8cc98d59a00349e3b23acd8a8549c80dbc8) - @jertel
+- Update minimum versions for third-party dependencies in requirements.txt and setup.py - [#1051](https://github.com/jertel/elastalert2/pull/1051) - @nsano-rururu
+- [Docs] Clarify `import` support for list of files - [#1075](https://github.com/jertel/elastalert2/pull/1075) - @sqrooted
+- Add support for Kibana 8.6 for Kibana Discover - [#1080](https://github.com/jertel/elastalert2/pull/1080) - @nsano-rururu
+- Modify schema to allow string and boolean for `*_ca_certs` to allow for one to specify a cert bundle for SSL certificate verification - [#1082](https://github.com/jertel/elastalert2/pull/1082) - @goggin
+- Fix UnicodeEncodeError in PagerDutyAlerter - [#1091](https://github.com/jertel/elastalert2/pull/1091) - @nsano-rururu
+- The scan_entire_timeframe setting, when used with use_count_query or use_terms_query will now scan entire timeframe on subsequent rule runs - [#1097](https://github.com/jertel/elastalert2/pull/1097) - @rschirin
+- Add new unit tests to cover changes in the HTTP POST2 alerter - [#1104](https://github.com/jertel/elastalert2/pull/1104) - @akusei
+- [Docs] Updated HTTP POST2 documentation to outline changes with payloads, headers and multiline JSON strings - [#1104](https://github.com/jertel/elastalert2/pull/1104) - @akusei
+- [HTTP POST2] Additional error checking around rendering and dumping payloads/headers to JSON - [#1104](https://github.com/jertel/elastalert2/pull/1104) - @akusei
+
+# 2.9.0
+
+## Breaking changes
 - None
 
 ## New features

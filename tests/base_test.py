@@ -101,7 +101,7 @@ def test_query(ea):
         size=ea.rules[0]['max_query_size'], scroll=ea.conf['scroll_keepalive'])
 
 
-def test_query_with_fields(ea):
+def test_query_with_stored_fields(ea):
     ea.rules[0]['_source_enabled'] = False
     ea.thread_data.current_es.search.return_value = {'hits': {'total': {'value': 0}, 'hits': []}}
     ea.run_query(ea.rules[0], START, END)
@@ -109,6 +109,18 @@ def test_query_with_fields(ea):
         'query': {'bool': {
             'filter': {'bool': {'must': [{'range': {'@timestamp': {'lte': END_TIMESTAMP, 'gt': START_TIMESTAMP}}}]}}}},
         'sort': [{'@timestamp': {'order': 'asc'}}], 'stored_fields': ['@timestamp']}, index='idx', ignore_unavailable=True,
+        size=ea.rules[0]['max_query_size'], scroll=ea.conf['scroll_keepalive'])
+
+
+def test_query_with_fields(ea):
+    ea.rules[0]['fields'] = ['test_runtime_field']
+    ea.thread_data.current_es.search.return_value = {'hits': {'total': {'value': 0}, 'hits': []}}
+    ea.run_query(ea.rules[0], START, END)
+    ea.thread_data.current_es.search.assert_called_with(body={
+        'query': {'bool': {
+            'filter': {'bool': {'must': [{'range': {'@timestamp': {'lte': END_TIMESTAMP, 'gt': START_TIMESTAMP}}}]}}}},
+        'sort': [{'@timestamp': {'order': 'asc'}}], 'fields': ['test_runtime_field']},
+        index='idx', ignore_unavailable=True, _source_includes=['@timestamp'],
         size=ea.rules[0]['max_query_size'], scroll=ea.conf['scroll_keepalive'])
 
 
@@ -876,11 +888,31 @@ def test_set_starttime(ea):
     ea.set_starttime(ea.rules[0], end)
     assert ea.rules[0]['starttime'] == end - ea.buffer_time
 
-    # scan_entire_timeframe
-    ea.rules[0].pop('previous_endtime')
+    # scan_entire_timeframe without use_count_query or use_terms_query
     ea.rules[0].pop('starttime')
     ea.rules[0]['timeframe'] = datetime.timedelta(days=3)
     ea.rules[0]['scan_entire_timeframe'] = True
+    with mock.patch.object(ea, 'get_starttime') as mock_gs:
+        mock_gs.return_value = None
+        ea.set_starttime(ea.rules[0], end)
+    assert ea.rules[0]['starttime'] == end - datetime.timedelta(days=3)
+
+    # scan_entire_timeframe with use_count_query, first run
+    ea.rules[0].pop('starttime')
+    ea.rules[0]['timeframe'] = datetime.timedelta(days=3)
+    ea.rules[0]['scan_entire_timeframe'] = True
+    ea.rules[0]['use_count_query'] = True
+    with mock.patch.object(ea, 'get_starttime') as mock_gs:
+        mock_gs.return_value = None
+        ea.set_starttime(ea.rules[0], end)
+    assert ea.rules[0]['starttime'] == end - datetime.timedelta(days=3)
+
+    # scan_entire_timeframe with use_count_query, subsequent run
+    ea.rules[0].pop('starttime')
+    ea.rules[0]['timeframe'] = datetime.timedelta(days=3)
+    ea.rules[0]['scan_entire_timeframe'] = True
+    ea.rules[0]['use_count_query'] = True
+    ea.rules[0]['previous_endtime'] = end
     with mock.patch.object(ea, 'get_starttime') as mock_gs:
         mock_gs.return_value = None
         ea.set_starttime(ea.rules[0], end)

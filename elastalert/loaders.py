@@ -21,6 +21,7 @@ import elastalert.alerters.dingtalk
 import elastalert.alerters.discord
 import elastalert.alerters.exotel
 import elastalert.alerters.gitter
+import elastalert.alerters.gelf
 import elastalert.alerters.googlechat
 import elastalert.alerters.httppost
 import elastalert.alerters.httppost2
@@ -128,7 +129,8 @@ class RulesLoader(object):
         'chatwork': elastalert.alerters.chatwork.ChatworkAlerter,
         'datadog': elastalert.alerters.datadog.DatadogAlerter,
         'ses': elastalert.alerters.ses.SesAlerter,
-        'rocketchat': elastalert.alerters.rocketchat.RocketChatAlerter
+        'rocketchat': elastalert.alerters.rocketchat.RocketChatAlerter,
+        'gelf': elastalert.alerters.gelf.GelfAlerter
     }
 
     # A partial ordering of alert types. Relative order will be preserved in the resulting alerts list
@@ -345,6 +347,7 @@ class RulesLoader(object):
         rule.setdefault('description', "")
         rule.setdefault('jinja_root_name', "_data")
         rule.setdefault('query_timezone', "")
+        rule.setdefault('fields', None)
 
         # Set timestamp_type conversion function, used when generating queries and processing hits
         rule['timestamp_type'] = rule['timestamp_type'].strip().lower()
@@ -390,6 +393,9 @@ class RulesLoader(object):
 
         if 'include' in rule and type(rule['include']) != list:
             raise EAException('include option must be a list')
+
+        if 'fields' in rule and rule['fields'] is not None and type(rule['fields']) != list:
+            raise EAException('fields option must be a list')
 
         raw_query_key = rule.get('query_key')
         if isinstance(raw_query_key, list):
